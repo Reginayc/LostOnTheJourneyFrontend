@@ -30,13 +30,19 @@
 .update-movie-dialog-content input,
 .update-movie-dialog-content textarea {
     display: block;
-    width: calc(100% - 20px); /* Adjusted to add some padding */
+    width: calc(100% - 40px); /* Adjust width to account for padding */
     margin: 10px auto;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    max-width: 100%;
+}
+
+.update-movie-dialog-content textarea {
+    resize: vertical;
+    height: 100px; /* Set a default height */
 }
 
 .update-movie-dialog-content button {

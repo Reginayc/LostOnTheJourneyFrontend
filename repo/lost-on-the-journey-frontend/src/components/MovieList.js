@@ -57,7 +57,7 @@ const MovieList = () => {
 
     return (
         <div className="movie-list">
-            <h2>Movie List</h2>
+            <h2>Movie WatchList</h2>
             <form onSubmit={handleAddMovie} className="add-movie-form">
                 <input
                     type="text"
