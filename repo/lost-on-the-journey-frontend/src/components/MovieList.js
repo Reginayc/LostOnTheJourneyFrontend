@@ -24,6 +24,10 @@ const MovieList = () => {
         fetchMovies();
     }, []);
 
+    const handleDelete = (id) => {
+        setMovies(movies.filter(movie => movie.id !== id));
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -34,6 +38,7 @@ const MovieList = () => {
                 {movies.map(movie => (
                     <li key={movie.id}>
                         <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+                        <DeleteMovie id={movie.id} onDelete={handleDelete} />
                     </li>
                 ))}
             </ul>
