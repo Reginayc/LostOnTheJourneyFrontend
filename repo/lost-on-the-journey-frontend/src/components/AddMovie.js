@@ -1,6 +1,5 @@
 // src/components/AddMovie.js
 import React, { useState } from 'react';
-import api from '../api/AxiosConfig';
 
 const AddMovie = () => {
     const [title, setTitle] = useState('');
