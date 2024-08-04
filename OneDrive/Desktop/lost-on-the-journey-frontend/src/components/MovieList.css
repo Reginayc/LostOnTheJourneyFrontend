@@ -1,0 +1,10 @@
+/* src/MovieList.css */
+.movie-list {
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .movie-list h2 {
+    color: #333;
+  }
+  
