@@ -1,14 +1,14 @@
-// src/components/UpdateMovie.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import api from '../api/AxiosConfig';
 
-const UpdateMovie = () => {
-    const { id } = useParams();
-    const [title, setTitle] = useState('');
-    const [genre, setGenre] = useState('');
-    const [description, setDescription] = useState('');
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState('');
+const UpdateMovie: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [title, setTitle] = useState<string>('');
+    const [genre, setGenre] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string>('');
 
     useEffect(() => {
         const fetchMovie = async () => {
@@ -25,7 +25,7 @@ const UpdateMovie = () => {
         fetchMovie();
     }, [id]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await api.put(`/movies/${id}`, { title, genre, description });

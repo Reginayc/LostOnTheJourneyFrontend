@@ -1,16 +1,21 @@
-// src/components/MovieList.js
 import React, { useState, useEffect } from 'react';
 import api from '../api/AxiosConfig';
 import './MovieList.css';
 import UpdateMovieDialog from './UpdateMovieDialog';
 
-const MovieList = () => {
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [newTitle, setNewTitle] = useState('');
-    const [newDescription, setNewDescription] = useState('');
-    const [selectedMovie, setSelectedMovie] = useState(null);
+interface Movie {
+    id: number;
+    title: string;
+    description: string;
+}
+
+const MovieList: React.FC = () => {
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [newTitle, setNewTitle] = useState<string>('');
+    const [newDescription, setNewDescription] = useState<string>('');
+    const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -19,7 +24,7 @@ const MovieList = () => {
                 setMovies(response.data);
                 setLoading(false);
             } catch (err) {
-                setError(err.message);
+                setError((err as Error).message);
                 setLoading(false);
             }
         };
@@ -27,7 +32,7 @@ const MovieList = () => {
         fetchMovies();
     }, []);
 
-    const handleAddMovie = async (e) => {
+    const handleAddMovie = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const response = await api.post('/movies', { title: newTitle, description: newDescription });
@@ -39,11 +44,11 @@ const MovieList = () => {
         }
     };
 
-    const handleUpdateMovie = (id, newTitle, newDescription) => {
+    const handleUpdateMovie = (id: number, newTitle: string, newDescription: string) => {
         setMovies(movies.map(movie => (movie.id === id ? { ...movie, title: newTitle, description: newDescription } : movie)));
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id: number) => {
         try {
             await api.delete(`/movies/${id}`);
             setMovies(movies.filter(movie => movie.id !== id));
