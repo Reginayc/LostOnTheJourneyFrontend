@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../api/AxiosConfig';
 import { Link } from 'react-router-dom';
 import './MovieList.css'; // Import the CSS file
+import DeleteMovie from './DeleteMovie';
 
 const MovieList = () => {
     const [movies, setMovies] = useState([]);
