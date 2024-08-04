@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/AxiosConfig';
 import './MovieList.css';
+import UpdateMovieDialog from './UpdateMovieDialog';
 
 const MovieList = () => {
     const [movies, setMovies] = useState([]);
@@ -9,7 +10,7 @@ const MovieList = () => {
     const [error, setError] = useState(null);
     const [newTitle, setNewTitle] = useState('');
     const [newDescription, setNewDescription] = useState('');
-    const [newImdbUrl, setNewImdbUrl] = useState('');
+    const [selectedMovie, setSelectedMovie] = useState(null);
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -33,19 +34,13 @@ const MovieList = () => {
             setMovies([...movies, response.data]);
             setNewTitle('');
             setNewDescription('');
-            setNewImdbUrl('');
         } catch (err) {
             setError('Error adding movie');
         }
     };
 
-    const handleUpdateMovie = async (id, newTitle) => {
-        try {
-            await api.put(`/movies/${id}`, { title: newTitle });
-            setMovies(movies.map(movie => (movie.id === id ? { ...movie, title: newTitle } : movie)));
-        } catch (err) {
-            setError('Error updating movie');
-        }
+    const handleUpdateMovie = (id, newTitle, newDescription) => {
+        setMovies(movies.map(movie => (movie.id === id ? { ...movie, title: newTitle, description: newDescription } : movie)));
     };
 
     const handleDelete = async (id) => {
@@ -78,61 +73,28 @@ const MovieList = () => {
                     placeholder="New movie description"
                     required
                 />
-                <input
-                    type="text"
-                    value={newImdbUrl}
-                    onChange={(e) => setNewImdbUrl(e.target.value)}
-                    placeholder="IMDb URL"
-                    required
-                />
                 <button type="submit">Add Movie</button>
             </form>
             <ul>
                 {movies.map(movie => (
                     <li key={movie.id} className="movie-item">
-                        <EditableTitle
-                            movie={movie}
-                            onUpdate={(newTitle) => handleUpdateMovie(movie.id, newTitle)}
-                        />
-                        <a href={movie.imdbUrl} target="_blank" rel="noopener noreferrer">
-                            {movie.title}
-                        </a>
-                        <button onClick={() => handleDelete(movie.id)} className="delete-button">Delete</button>
+                        <div className="movie-details">
+                            <span className="movie-title">{movie.title}</span>
+                            <span className="movie-description">{movie.description}</span>
+                        </div>
+                        <div className="movie-actions">
+                            <button onClick={() => setSelectedMovie(movie)} className="update-button">Update</button>
+                            <button onClick={() => handleDelete(movie.id)} className="delete-button">Delete</button>
+                        </div>
                     </li>
                 ))}
             </ul>
-        </div>
-    );
-};
-
-const EditableTitle = ({ movie, onUpdate }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [title, setTitle] = useState(movie.title);
-
-    const handleEdit = () => {
-        setIsEditing(true);
-    };
-
-    const handleSave = () => {
-        onUpdate(title);
-        setIsEditing(false);
-    };
-
-    return (
-        <div className="editable-title">
-            {isEditing ? (
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    onBlur={handleSave}
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleSave();
-                    }}
-                    autoFocus
+            {selectedMovie && (
+                <UpdateMovieDialog
+                    movie={selectedMovie}
+                    onClose={() => setSelectedMovie(null)}
+                    onUpdate={handleUpdateMovie}
                 />
-            ) : (
-                <span onClick={handleEdit}>{title}</span>
             )}
         </div>
     );
