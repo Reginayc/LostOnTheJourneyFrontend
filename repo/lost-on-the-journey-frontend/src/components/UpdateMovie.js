@@ -1,32 +1,46 @@
-// src/components/AddMovie.js
-import React, { useState } from 'react';
+// src/components/UpdateMovie.js
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import api from '../api/AxiosConfig';
 
-const AddMovie = () => {
+const UpdateMovie = () => {
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [genre, setGenre] = useState('');
     const [description, setDescription] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState('');
 
+    useEffect(() => {
+        const fetchMovie = async () => {
+            try {
+                const response = await api.get(`/movies/${id}`);
+                setTitle(response.data.title);
+                setGenre(response.data.genre);
+                setDescription(response.data.description);
+            } catch (err) {
+                setError('Error fetching movie details.');
+            }
+        };
+
+        fetchMovie();
+    }, [id]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/movies', { title, genre, description });
-            setSuccess('Movie added successfully!');
-            setTitle('');
-            setGenre('');
-            setDescription('');
+            await api.put(`/movies/${id}`, { title, genre, description });
+            setSuccess('Movie updated successfully!');
             setError(null);
         } catch (err) {
-            setError('Error adding movie.');
+            setError('Error updating movie.');
             setSuccess('');
         }
     };
 
     return (
         <div>
-            <h1>Add Movie</h1>
+            <h1>Update Movie</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Title:</label>
@@ -40,7 +54,7 @@ const AddMovie = () => {
                     <label>Description:</label>
                     <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
                 </div>
-                <button type="submit">Add Movie</button>
+                <button type="submit">Update Movie</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
@@ -48,4 +62,4 @@ const AddMovie = () => {
     );
 };
 
-export default AddMovie;
+export default UpdateMovie;
