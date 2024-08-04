@@ -16,31 +16,55 @@ const AddMovie: React.FC = () => {
       setTitle('');
       setGenre('');
       setDescription('');
+      setError(null);  // Clear any previous errors
     } catch (err) {
       setError('Error adding movie.');
+      setSuccess('');  // Clear any previous success message
     }
   };
 
   return (
-    <div>
-      <h1>Add Movie</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-6">Add Movie</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          <label className="block text-sm font-medium text-gray-700">Title:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          />
         </div>
         <div>
-          <label>Genre:</label>
-          <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} required />
+          <label className="block text-sm font-medium text-gray-700">Genre:</label>
+          <input
+            type="text"
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            required
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          />
         </div>
         <div>
-          <label>Description:</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+          <label className="block text-sm font-medium text-gray-700">Description:</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          />
         </div>
-        <button type="submit">Add Movie</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+        >
+          Add Movie
+        </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {success && <p className="mt-4 text-green-500">{success}</p>}
     </div>
   );
 };
