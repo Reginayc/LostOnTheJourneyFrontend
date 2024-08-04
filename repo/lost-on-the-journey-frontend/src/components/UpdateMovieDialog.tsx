@@ -1,9 +1,20 @@
-// src/components/UpdateMovieDialog.js
 import React, { useState } from 'react';
 import api from '../api/AxiosConfig';
 import './UpdateMovieDialog.css';
 
-const UpdateMovieDialog = ({ movie, onClose, onUpdate }) => {
+interface Movie {
+    id: number;
+    title: string;
+    description: string;
+}
+
+interface UpdateMovieDialogProps {
+    movie: Movie;
+    onClose: () => void;
+    onUpdate: (id: number, title: string, description: string) => void;
+}
+
+const UpdateMovieDialog: React.FC<UpdateMovieDialogProps> = ({ movie, onClose, onUpdate }) => {
     const [title, setTitle] = useState(movie.title);
     const [description, setDescription] = useState(movie.description);
 

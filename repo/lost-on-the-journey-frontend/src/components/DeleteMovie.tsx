@@ -1,8 +1,12 @@
-// src/components/DeleteMovie.js
 import React from 'react';
 import api from '../api/AxiosConfig';
 
-const DeleteMovie = ({ id, onDelete }) => {
+interface DeleteMovieProps {
+    id: number;
+    onDelete: (id: number) => void;
+}
+
+const DeleteMovie: React.FC<DeleteMovieProps> = ({ id, onDelete }) => {
     const handleDelete = async () => {
         try {
             await api.delete(`/movies/${id}`);
